@@ -1,13 +1,13 @@
 {
   "name": "airbasix",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "AirBasix synchronizes airtable bases to wix collections with the help of wix cron jobs.",
   "main": "./lib/AirBasix.js",
   "types": "./lib/airbasix.d.ts",
   "scripts": {
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
-    "someprepare": "rm -rf lib/* && tsc",
-    "sometest": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
