@@ -1,3 +1,18 @@
+/**
+ * AirBasix 
+ * Author: Paul McDowell
+ * 
+ * @description AirBasix (Airbase + Wix ) enables synchronizing airtable bases to
+ * wix collections. This is the stand-alone version contained below. The newer 
+ * "current" version that is found via npm is contained in the source directory. 
+ * This version has been left intact for those that want an easier to read and
+ * more guided version of the program that doesn't require them to implement a
+ * wrapper on the node module for executing against potentially multiple bases
+ * and collections. This is a 'one and done' design.
+ * 
+ */
+
+
 /*
  * If you're not sure how this all works, the following three keys are the 
  * most important things you need to change. Please note, for security purposes

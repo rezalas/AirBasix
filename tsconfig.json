@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "lib": ["ES6","DOM"],
+        "target": "ES6",
+        "module": "CommonJS",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "outDir": "lib",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declaration": true
+    },
+    "include": ["src/**/*.ts"]
+}
