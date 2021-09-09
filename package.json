@@ -1,0 +1,29 @@
+{
+  "name": "airbasix",
+  "version": "0.2.0",
+  "description": "AirBasix synchronizes airtable bases to wix collections with the help of wix cron jobs.",
+  "main": "AirBasix.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rezalas/AirBasix.git"
+  },
+  "keywords": [
+    "airtable",
+    "wix",
+    "wixcode",
+    "velo",
+    "airtable-scripts"
+  ],
+  "dependencies": {
+    "airtable":"^0.11.1"
+  },
+  "author": "Paul McDowell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rezalas/AirBasix/issues"
+  },
+  "homepage": "https://github.com/rezalas/AirBasix#readme"
+}
