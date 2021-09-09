@@ -61,7 +61,7 @@ class AirBasix {
      * Processes views provided in the views constant, relative to the configured base api.
      * If the same Id is present in multiple airtable views the duplicates are skipped.
      */
-    async SyncViews(): Promise<void> {
+    private async SyncViews(): Promise<void> {
         let presentIds = [];
         let noErrorsFound = true;
 
@@ -106,7 +106,7 @@ class AirBasix {
      * @param {string} errorMsg - The message describing the error received.
      * @param {string} code - The error code received, usually from the API. 
      */
-    LogError (errorMsg, code): void {
+    private LogError (errorMsg, code): void {
         console.log(`Error code ${code}: ${errorMsg}`);
     }
 
@@ -114,7 +114,7 @@ class AirBasix {
      * Inserts a new Airtable entry into the wix collection.
      * @param {Airtable.Record<FieldSet>} atRecord - Airtable Record object.
      */
-    InsertRecord(atRecord: Airtable.Record<FieldSet>): void {
+    private InsertRecord(atRecord: Airtable.Record<FieldSet>): void {
         var wixItem = wixItem || {
             [this._wixAirtableIdName] : atRecord.id,
             'createdTime': atRecord['createdTime'] ?? ''
@@ -129,7 +129,7 @@ class AirBasix {
      * @param {Airtable.Record<FieldSet>} atRecord - Airtable Record object.
      * @param {object} wixRecord - Wix record object.
      */
-    UpdateRecord(atRecord:Airtable.Record<FieldSet>, wixRecord:object): void {
+    private UpdateRecord(atRecord:Airtable.Record<FieldSet>, wixRecord:object): void {
         var wixItem = wixRecord || {
             [this._wixIdName] : wixItem._id,
             [this._wixAirtableIdName] : atRecord.id,
@@ -148,7 +148,7 @@ class AirBasix {
      * required ID and timestamp properties.
      * @returns {object} A WixRecord object with the appropriate data entries added.
      */
-    CopyAirtableFieldsToWixRecord(atFields: FieldSet, wixRecord: object): object {
+    private CopyAirtableFieldsToWixRecord(atFields: FieldSet, wixRecord: object): object {
         for(var member in atFields) { // automated field processing
             if(typeof(atFields) === 'function')
                 continue; // skip over functions, only process data members. 
@@ -219,7 +219,7 @@ class AirBasix {
      * or update as needed via the wix-data.save function.
      * @param {object} wixItem - The fully formed WixRecord for entry.
      */
-    UpdateWix(wixItem): void {
+    private UpdateWix(wixItem): void {
         wixData.save(this._wixAirtableStore, wixItem, this._wixDataOpts).then((results) => {
             // the item was updated successfully
             console.debug("item " + results._id + " created.");
@@ -232,7 +232,7 @@ class AirBasix {
      * @param {string[]} keepids The ids we want to keep in the table, stored as an array of strings
      * @returns An array of wix collection Ids not matching the supplied list (limited to 1,000 Ids)
      */
-    async getOrphanIds(keepids:string[]): Promise<number[]> {
+    private async getOrphanIds(keepids:string[]): Promise<number[]> {
         let foundIds:number[] = [];
         let records = await wixData.query(this._wixAirtableStore)
                 .limit(1000) // this arbitrary limit is created by Wix. Should their policy change, so can this
@@ -250,7 +250,7 @@ class AirBasix {
      * I suggest you expand on this section to enable that process. 
      * @param {string[]} keepids - The list of all valid Ids from airtable.
      */
-    async RemoveMissingRecords(keepids): Promise<void> {
+    private async RemoveMissingRecords(keepids): Promise<void> {
         if(keepids == null || keepids == undefined || keepids.length == 0)
             return;
         

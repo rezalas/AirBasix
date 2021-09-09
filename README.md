@@ -1,6 +1,6 @@
 # AirBasix
 
-AirBasix synchronizes airtable bases to wix collections with the help of wix cron jobs. In order to use this you need to add AirBasix to the backend section of Wix and add the Airtable Api Node module. If you want to perform the updates automatically you also need to create a wix cron job that repeats as often as you want and executes the exported manual sync function. 
+AirBasix synchronizes airtable bases to wix collections, typically with the help of wix cron jobs. Once you add AirBasix to the package imports in Wix you need to implement a backend script that creates an Airbasix object passing in the required parameters. If you want to perform the updates automatically you also need to create a wix cron job that repeats as often as you want.
 
 
 ## Dependencies and Requirements
@@ -16,13 +16,27 @@ AirBasix synchronizes airtable bases to wix collections with the help of wix cro
 
 ### Packages
 
-* Airtable JS [npm package link]('https://www.npmjs.com/package/airtable')
+* Airtable JS
 
 ## Suggestions
 
-Airtable suggests using a separate account for implementing API access, and granting that account the minimum required access. For our purposes I suggest you create an account dedicated to this synchronization and only grant it read-only access to any data you want to sync. 
+Airtable suggests using a separate account for implementing API access, and granting that account the minimum required access. For safety purposes I suggest you create an account dedicated to this synchronization and only grant it read-only access to any data you want to sync. 
 
 ## Use Example
+
+### Node 
+
+Implementing functionality for the node module is relatively simple. Just create an instance of airbasix with the keys and table data you want, call `manualUpdate()` and wait for it to complete. That's it!
+
+```js
+const AirBasix = require('airbasix');
+
+let basix = new AirBasix('airtableKey','airtableBaseId','wixCollectionName','airtableTableOrViewName');
+await basix.manualUpdate();
+```
+
+
+### Legacy (non-module JS version)
 
 First, you need to update the following keys based on your accounts and API data from airtable.
 
@@ -34,7 +48,7 @@ const airtableRootDb = 'AnAirtableViewName'; // The view/table in airtable
 
 ```
 
-After that just run the following command 
+After that just run the following command or schedule a wix cronjob to do it for you.
 
 ```js
 ManualUpdate();
