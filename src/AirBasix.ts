@@ -62,7 +62,7 @@ class AirBasix {
      * If the same Id is present in multiple airtable views the duplicates are skipped.
      */
     private async SyncViews(): Promise<void> {
-        let presentIds = [];
+        let presentIds: string[] = [];
         let noErrorsFound = true;
 
         /* For the chosen view, iterate over all the pages contained in that view and collect
@@ -106,7 +106,7 @@ class AirBasix {
      * @param {string} errorMsg - The message describing the error received.
      * @param {string} code - The error code received, usually from the API. 
      */
-    private LogError (errorMsg, code): void {
+    private LogError (errorMsg: string, code: string): void {
         console.log(`Error code ${code}: ${errorMsg}`);
     }
 
@@ -115,7 +115,7 @@ class AirBasix {
      * @param {Airtable.Record<FieldSet>} atRecord - Airtable Record object.
      */
     private InsertRecord(atRecord: Airtable.Record<FieldSet>): void {
-        var wixItem = wixItem || {
+        var wixItem: any = {
             [this._wixAirtableIdName] : atRecord.id,
             'createdTime': atRecord['createdTime'] ?? ''
         };
@@ -129,12 +129,8 @@ class AirBasix {
      * @param {Airtable.Record<FieldSet>} atRecord - Airtable Record object.
      * @param {object} wixRecord - Wix record object.
      */
-    private UpdateRecord(atRecord:Airtable.Record<FieldSet>, wixRecord:object): void {
-        var wixItem = wixRecord || {
-            [this._wixIdName] : wixItem._id,
-            [this._wixAirtableIdName] : atRecord.id,
-            'createdTime': atRecord['createdTime'] ?? ''
-        };
+    private UpdateRecord(atRecord:Airtable.Record<FieldSet>, wixRecord:any): void {
+        var wixItem = wixRecord;
 
         wixItem = this.CopyAirtableFieldsToWixRecord(atRecord.fields, wixItem);
         this.UpdateWix(wixItem);
@@ -150,7 +146,7 @@ class AirBasix {
      */
     private CopyAirtableFieldsToWixRecord(atFields: FieldSet, wixRecord: object): object {
         for(var member in atFields) { // automated field processing
-            if(typeof(atFields) === 'function')
+            if(typeof(atFields[member]) === 'function')
                 continue; // skip over functions, only process data members. 
             
             var data = atFields[member];
@@ -175,7 +171,7 @@ class AirBasix {
                 else if(dt === 'object') {
                     if(data[0].hasOwnProperty('type') && data[0].type.indexOf('image') >= 0) {
                         // process as an array of images.
-                        var images = [];
+                        var images: any[] = [];
                         (data as Attachment[]).forEach((image) => images.push({type: 'image', src: image.url}));
                         wixRecord[toMemberName] = images;
                     }
@@ -191,7 +187,7 @@ class AirBasix {
                 else if(member.toLowerCase().indexOf(this._airtableGeocodeFieldName) >= 0) {
                     // geocode data in airtable is stored in a base64 string, so we need to 
                     // break that out into json and then parse it into an object we can work with.
-                    var jsonString = new Buffer((atFields[member]as string).split(' ')[1], 'base64').toString();
+                    var jsonString = Buffer.from((atFields[member]as string).split(' ')[1], 'base64').toString();
                     var jsonObj = JSON.parse(jsonString);
 
                     var wixObj = {'formatted': jsonObj.o.formattedAddress,
@@ -219,7 +215,7 @@ class AirBasix {
      * or update as needed via the wix-data.save function.
      * @param {object} wixItem - The fully formed WixRecord for entry.
      */
-    private UpdateWix(wixItem): void {
+    private UpdateWix(wixItem: any): void {
         wixData.save(this._wixAirtableStore, wixItem, this._wixDataOpts).then((results) => {
             // the item was updated successfully
             console.debug("item " + results._id + " created.");
@@ -250,7 +246,7 @@ class AirBasix {
      * I suggest you expand on this section to enable that process. 
      * @param {string[]} keepids - The list of all valid Ids from airtable.
      */
-    private async RemoveMissingRecords(keepids): Promise<void> {
+    private async RemoveMissingRecords(keepids: string[]): Promise<void> {
         if(keepids == null || keepids == undefined || keepids.length == 0)
             return;
         

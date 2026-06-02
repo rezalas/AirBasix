@@ -132,7 +132,7 @@ function LogError (errorMsg, code) {
  * @param {object} atRecord - Airtable Record object.
  */
 function InsertRecord(atRecord) {
-	var wixItem = wixItem || {
+	var wixItem = {
 		[wixAirtableIdName] : atRecord.id,
 		'createdTime': atRecord.createdTime
 	};
@@ -147,11 +147,7 @@ function InsertRecord(atRecord) {
  * @param {object} wixRecord - Wix record object.
  */
 function UpdateRecord(atRecord, wixRecord) {
-	var wixItem = wixRecord || {
-		[wixIdName] : wixItem._id,
-		[wixAirtableIdName] : atRecord.id,
-		'createdTime': atRecord.createdTime
-	};
+	var wixItem = wixRecord;
 
 	wixItem = CopyAirtableFieldsToWixRecord(atRecord.fields, wixItem);
 	UpdateWix(wixItem);
@@ -167,7 +163,7 @@ function UpdateRecord(atRecord, wixRecord) {
  */
 function CopyAirtableFieldsToWixRecord(atFields, wixRecord) {
 	for(var member in atFields) { // automated field processing
-		if(typeof(atFields) === 'function')
+		if(typeof(atFields[member]) === 'function')
 			continue; // skip over functions, only process data members. 
 		
 		var data = atFields[member];
@@ -208,7 +204,7 @@ function CopyAirtableFieldsToWixRecord(atFields, wixRecord) {
 			else if(member.toLowerCase().indexOf(airtableGeocodeFieldName) >= 0) {
 				// geocode data in airtable is stored in a base64 string, so we need to 
                 // break that out into json and then parse it into an object we can work with.
-				var jsonString = new Buffer(atFields[member].split(' ')[1], 'base64').toString();
+				var jsonString = Buffer.from(atFields[member].split(' ')[1], 'base64').toString();
 				var jsonObj = JSON.parse(jsonString);
 
 				var wixObj = {'formatted': jsonObj.o.formattedAddress,
